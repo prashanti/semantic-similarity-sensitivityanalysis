@@ -38,13 +38,10 @@ def load_ancestors(granularity):
     infile.close()
     return ancestors
 
-def load_randomprofiles(granularity):
+def load_randomprofiles():
     randomprofiles=dict()
     annotationpool=[]
-    if granularity=='E':
-        infile=open("../data/RandomProfiles2016_E.txt")
-    else:
-        infile=open("../data/RandomProfiles2016.txt")
+    infile=open("../data/RandomProfiles2016.txt")
     for line in infile:
         profileid,annotation=line.strip().split("\t")
         if profileid not in randomprofiles:
@@ -518,11 +515,19 @@ def experiment_simgic(dbprofiles,ancestors,queryprofilesize,annotationpool,metri
         out.write("Number of annotations replaced\tQuery ID\tDatabase ID\tScore List\n")
 
         
-    else:
+    elif decaytype=="AncestralReplacement":
         outfile="../results/FullDistribution/AncestralReplacement/"+metric+"/"+granularity+"_ProfileSize"+str(queryprofilesize)+"__"+icflag+"_"+metric+"_Results.tsv"
         decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         out=open(outfile,'w')
         out.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List\n")
+
+    elif decaytype=="AncestralReplacement_OnebyOne":
+        decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_OnebyOne_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
+        outfile="../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/"+granularity+"_ProfileSize"+str(queryprofilesize)+"__"+icflag+"_"+metric+"_Results.tsv"
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/")
+        out=open(outfile,'w')
+        out.write("Number of degrees of decay\tQuery ID\tDatabase ID\tScore List1\tScore list2\n")
 
 
 
@@ -552,11 +557,22 @@ def experiment_groupwise_jaccard(dbprofiles,ancestors,queryprofilesize,annotatio
         out.write("Number of annotations replaced\tQuery ID\tDatabase ID\tScore List\n")
 
         
-    else:
+    elif decaytype=="AncestralReplacement":
         decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         outfile="../results/FullDistribution/AncestralReplacement/"+metric+"/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List\n")
+
+    elif decaytype=="AncestralReplacement_OnebyOne":
+        decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_OnebyOne_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
+        
+        outfile="../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_"+metric+"_Results.tsv"
+
+
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/")
+        out=open(outfile,'w')
+        out.write("Number of degrees of decay\tQuery ID\tDatabase ID\tScore List\n")
 
 
 
@@ -583,11 +599,21 @@ def experiment_allpairs(dbprofiles,ancestors,queryprofilesize,annotationpool,icd
         outfile="../results/FullDistribution/RandomReplacement/"+metric+"/AP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_AP_"+icflag+ "_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of annotations replaced\tQuery ID\tDatabase ID\tScore List\n")
-    else:
+    elif decaytype=="AncestralReplacement":
         decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         outfile="../results/FullDistribution/AncestralReplacement/"+metric+"/AP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_AP_"+icflag+ "_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List\n")
+
+    elif decaytype=="AncestralReplacement_OnebyOne":
+        decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_OnebyOne_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
+        
+        outfile="../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/AP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_AP_"+icflag+ "_"+metric+"_Results.tsv"
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/AP/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/AP/")
+        out=open(outfile,'w')
+        out.write("Number of degrees of decay\tQuery ID\tDatabase ID\tScore List1\tScore list2\n")
+   
     
 
     for queryid in decayedprofiles:
@@ -617,12 +643,22 @@ def experiment_bestpairs_asymmetric(dbprofiles,ancestors,queryprofilesize,annota
         outfile="../results/FullDistribution/RandomReplacement/"+metric+"/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPAsym_"+icflag+ "_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of annotations replaced\tQuery ID\tDatabase ID\tScore List\n")
-    else:
+    elif decaytype=="AncestralReplacement":
+        print "Here"
         decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         outfile="../results/FullDistribution/AncestralReplacement/"+metric+"/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPAsym_"+icflag+ "_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List\n")
-    
+
+    elif decaytype=="AncestralReplacement_OnebyOne":
+        decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_OnebyOne_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
+        
+        outfile="../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPAsym_"+icflag+ "_"+metric+"_Results.tsv"
+
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/BP/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/BP/")
+        out=open(outfile,'w')
+        out.write("Number of degrees of decay\tQuery ID\tDatabase ID\tScore List1\tScore list2\n")
 
     for queryid in decayedprofiles:
             for numreplaced in sorted([int(x) for x in decayedprofiles[queryid]]):
@@ -669,20 +705,43 @@ def experiment_hrss(dbprofiles,queryprofilesize,ancestors,icflag,icdict,subclass
 
         bpsym.write("Number of annotations replaced\tQuery ID\tDatabase ID\tScore List1\tScoreList2\n")
 
-
-
-
-
-    
-
-
-    else:
+    elif decaytype=="AncestralReplacement":
         decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         bpasymoutfile="../results/FullDistribution/AncestralReplacement/HRSS/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPAsym_"+icflag+ "_HRSS_Results.tsv"
 
         bpsymoutfile="../results/FullDistribution/AncestralReplacement/HRSS/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPSym_"+icflag+ "_HRSS_Results.tsv"
 
         apoutfile="../results/FullDistribution/AncestralReplacement/HRSS/AP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_AP_"+icflag+ "_HRSS_Results.tsv"
+
+
+
+        bpsym=open(bpsymoutfile,'w')
+
+        bpasym=open(bpasymoutfile,'w')
+
+        ap=open(apoutfile,'w')
+
+        ap.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List\n")
+
+        bpasym.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List\n")
+
+        bpsym.write("Number of decay degrees\tQuery ID\tDatabase ID\tScore List1\tScoreList2\n")
+
+    elif decaytype=="AncestralReplacement_OnebyOne":
+        decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_OnebyOne_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
+        
+
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/BP/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/BP/")
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/AP/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/AP/")
+
+
+        bpasymoutfile="../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPAsym_"+icflag+ "_HRSS_Results.tsv"
+
+        bpsymoutfile="../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPSym_"+icflag+ "_HRSS_Results.tsv"
+
+        apoutfile="../results/FullDistribution/AncestralReplacement_OnebyOne/HRSS/AP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_AP_"+icflag+ "_HRSS_Results.tsv"
 
 
 
@@ -731,19 +790,27 @@ def experiment_bestpairs_symmetric(dbprofiles,ancestors,queryprofilesize,annotat
     
     bpsimilaritydict=dict()
     if decaytype == "RandomReplacement":
-
-        
         decayedprofiles=json.load(open("../data/DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         outfile="../results/FullDistribution/RandomReplacement/"+metric+"/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPSym_"+icflag+ "_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of annotations replaced\tQuery ID\tDatabase ID\tScore List1\tScore list2\n")
 
 
-    else:
+    elif decaytype=="AncestralReplacement":
         decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
         outfile="../results/FullDistribution/AncestralReplacement/"+metric+"/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPSym_"+icflag+ "_"+metric+"_Results.tsv"
         out=open(outfile,'w')
         out.write("Number of degrees of decay\tQuery ID\tDatabase ID\tScore List1\tScore list2\n")
+
+    elif decaytype=="AncestralReplacement_OnebyOne":
+        decayedprofiles=json.load(open("../data/"+granularity+"_Ancestral_OnebyOne_DecayedProfilesDict_Size"+str(queryprofilesize)+".txt"))
+        outfile="../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/BP/"+granularity+"_ProfileSize"+str(queryprofilesize)+"_BPSym_"+icflag+ "_"+metric+"_Results.tsv"
+        if not os.path.exists("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/BP/"):
+            os.makedirs("../results/FullDistribution/AncestralReplacement_OnebyOne/"+metric+"/BP/")
+        out=open(outfile,'w')
+        out.write("Number of degrees of decay\tQuery ID\tDatabase ID\tScore List1\tScore list2\n")
+
+
 
 
     
@@ -776,7 +843,7 @@ def run_ap(icflag,metric):
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
     
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
 
 
@@ -800,7 +867,7 @@ def run_bp_sym_lin(icflag):
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
     
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
 
 
@@ -819,7 +886,7 @@ def run_bp_sym_jiang(icflag):
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
     
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
 
 
@@ -838,7 +905,7 @@ def run_bp_asym_jiang(icflag):
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
 
 
@@ -860,7 +927,7 @@ def run_bp_asym_lin(icflag):
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
 
 
@@ -878,13 +945,14 @@ def run_bp_asym_resnik(icflag):
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
 
 
 
     if icflag=="PIC":
-        icdict=json.load(open("../data/"+granularity+"_ProfileIC.txt"))
+        #icdict=json.load(open("../data/"+granularity+"_ProfileIC.txt"))
+        icdict=json.load(open("../data/"+granularity+"_ProfileIC_RR_PR.txt"))
         outfile=experiment_bestpairs_asymmetric(dbprofiles,ancestors,queryprofilesize,annotationpool,icdict,"PIC","Resnik",granularity,decaytype)
     else:
         icdict=json.load(open("../data/"+granularity+"_AnnotationIC.txt"))
@@ -896,7 +964,7 @@ def run_bp_sym_resnik(icflag):
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
     if icflag=="PIC":
         icdict=json.load(open("../data/"+granularity+"_ProfileIC.txt"))
@@ -913,7 +981,7 @@ def run_hrss(icflag):
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     
     ancestors=ancestors=load_ancestors(granularity)
     if icflag=="PIC":
@@ -939,7 +1007,7 @@ def run_bp_sym_jaccard():
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
     
     outfile=experiment_bestpairs_symmetric(dbprofiles,ancestors,queryprofilesize,annotationpool,dict(),"","Jaccard",granularity,decaytype)
@@ -950,7 +1018,7 @@ def run_bp_asym_jaccard():
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
     
     outfile=experiment_bestpairs_asymmetric(dbprofiles,ancestors,queryprofilesize,annotationpool,dict(),"","Jaccard",granularity,decaytype)
@@ -962,7 +1030,7 @@ def run_groupwise_jaccard():
     queryprofilesize=int(sys.argv[1])
     granularity=sys.argv[2]
     decaytype=sys.argv[4]
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
     
     outfile=experiment_groupwise_jaccard(dbprofiles,ancestors,queryprofilesize,annotationpool,'Groupwise_Jaccard',granularity,decaytype)
@@ -983,7 +1051,7 @@ def run_simGIC(icflag):
         
     else:
         icdict=json.load(open("../data/"+granularity+"_AnnotationIC.txt"))
-    dbprofiles,annotationpool=load_randomprofiles(granularity)
+    dbprofiles,annotationpool=load_randomprofiles()
     ancestors=ancestors=load_ancestors(granularity)
     
     outfile=experiment_simgic(dbprofiles,ancestors,queryprofilesize,annotationpool,'simGIC',icdict,icflag,granularity,decaytype)
